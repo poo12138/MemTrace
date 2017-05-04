@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-make all TARGET=intel64
+make obj-intel64/membuffer.so TARGET=intel64
