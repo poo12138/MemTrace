@@ -1,0 +1,1 @@
+../../../pin -t obj-intel64/memtrace.so -- /bin/ls
