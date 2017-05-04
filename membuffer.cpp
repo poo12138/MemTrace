@@ -130,7 +130,7 @@ VOID MLOG::DumpBufferToFile( struct MEMREF * reference, UINT64 numElements, THRE
     for(UINT64 i=0; i<numElements; i++, reference++)
     {
         if (reference->ea != 0)
-            _ofile << reference->pc << "   " << reference->ea << endl;
+            _ofile << reference->pc << ", " << reference->ea << endl; //TODO, pc: program counter; ea: effective address (data address)
     }
 }
 
