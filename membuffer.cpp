@@ -69,6 +69,8 @@ KNOB<BOOL> KnobEmitTrace(KNOB_MODE_WRITEONCE, "pintool", "emit", "0", "emit a tr
  */
 struct MEMREF
 {
+    //TODO: int tid;
+    //TODO: bool read;
     ADDRINT pc;
     ADDRINT ea;
 };
