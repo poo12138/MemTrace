@@ -129,11 +129,10 @@ MLOG::~MLOG()
 
 VOID MLOG::DumpBufferToFile( struct MEMREF * reference, UINT64 numElements, THREADID tid )
 {
-    //~ for(UINT64 i=0; i<numElements&&numElements<100000; i++, reference++)
-         for(UINT64 i=0; i<numElements; i++, reference++)
-     {
+    for(UINT64 i=0; i<numElements; i++, reference++)
+    {
         if (reference->ea != 0)
-            _ofile << reference->tid << "," << reference->pc<< "," << reference->read<<  ", " <<  reference->ea<< endl; //TODO, pc: program counter; ea: effective address (data address)
+            _ofile << reference->tid << ", " << reference->pc << ", " << reference->read << ", " << reference->ea << endl; //TODO, pc: program counter; ea: effective address (data address)
     }
 }
 
