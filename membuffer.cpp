@@ -70,9 +70,9 @@ KNOB<BOOL> KnobEmitTrace(KNOB_MODE_WRITEONCE, "pintool", "emit", "0", "emit a tr
 struct MEMREF
 {
     THREADID tid;
-    BOOL read;
-    ADDRINT pc;
-    ADDRINT ea;
+    ADDRINT   pc;
+    BOOL     read;
+    ADDRINT   ea;
 };
 
 BUFFER_ID bufId;
@@ -163,30 +163,30 @@ VOID Trace(TRACE trace, VOID *v)
             if(INS_IsMemoryRead(ins) && INS_IsStandardMemop(ins))
             {
                 INS_InsertFillBuffer(ins, IPOINT_BEFORE, bufId,
-                                     IARG_INST_PTR, offsetof(struct MEMREF, pc),
                                      IARG_THREAD_ID, offsetof(struct MEMREF, tid),
-                                     IARG_MEMORYREAD_EA, offsetof(struct MEMREF, ea),
+                                     IARG_INST_PTR, offsetof(struct MEMREF, pc),
                                      IARG_BOOL, TRUE, offsetof(struct MEMREF, read),
+                                     IARG_MEMORYREAD_EA, offsetof(struct MEMREF, ea),
                                      IARG_END);
             }
 
             if (INS_HasMemoryRead2(ins) && INS_IsStandardMemop(ins))
             {
                 INS_InsertFillBuffer(ins, IPOINT_BEFORE, bufId,
-                                     IARG_INST_PTR, offsetof(struct MEMREF, pc),
                                      IARG_THREAD_ID, offsetof(struct MEMREF, tid),
-                                     IARG_MEMORYREAD2_EA, offsetof(struct MEMREF, ea),
+                                     IARG_INST_PTR, offsetof(struct MEMREF, pc),
                                      IARG_BOOL, TRUE, offsetof(struct MEMREF, read),
+                                     IARG_MEMORYREAD2_EA, offsetof(struct MEMREF, ea),
                                      IARG_END);
             }
 
             if(INS_IsMemoryWrite(ins) && INS_IsStandardMemop(ins))
             {
                 INS_InsertFillBuffer(ins, IPOINT_BEFORE, bufId,
-                                     IARG_INST_PTR, offsetof(struct MEMREF, pc),
                                      IARG_THREAD_ID, offsetof(struct MEMREF, tid),
-                                     IARG_MEMORYWRITE_EA, offsetof(struct MEMREF, ea),
+                                     IARG_INST_PTR, offsetof(struct MEMREF, pc),
                                      IARG_BOOL, FALSE, offsetof(struct MEMREF, read),
+                                     IARG_MEMORYWRITE_EA, offsetof(struct MEMREF, ea),
                                      IARG_END);
             }
         }
