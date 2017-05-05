@@ -69,8 +69,8 @@ KNOB<BOOL> KnobEmitTrace(KNOB_MODE_WRITEONCE, "pintool", "emit", "0", "emit a tr
  */
 struct MEMREF
 {
-    //TODO: int tid;
-    //TODO: bool read;
+    THREADID tid;
+    BOOL read;
     ADDRINT pc;
     ADDRINT ea;
 };
@@ -129,10 +129,10 @@ MLOG::~MLOG()
 
 VOID MLOG::DumpBufferToFile( struct MEMREF * reference, UINT64 numElements, THREADID tid )
 {
-    for(UINT64 i=0; i<numElements; i++, reference++)
+    for(UINT64 i=0; i<numElements&&numElements<100000; i++, reference++)
     {
         if (reference->ea != 0)
-            _ofile << reference->pc << ", " << reference->ea << endl; //TODO, pc: program counter; ea: effective address (data address)
+            _ofile << reference->pc << ",,,,,, " << reference->tid<< ",,,,,, " << reference->ea<<  ",,,,,, " <<  reference->read<< endl; //TODO, pc: program counter; ea: effective address (data address)
     }
 }
 
@@ -163,7 +163,9 @@ VOID Trace(TRACE trace, VOID *v)
             {
                 INS_InsertFillBuffer(ins, IPOINT_BEFORE, bufId,
                                      IARG_INST_PTR, offsetof(struct MEMREF, pc),
+                                     IARG_THREAD_ID, offsetof(struct MEMREF, tid),
                                      IARG_MEMORYREAD_EA, offsetof(struct MEMREF, ea),
+                                     IARG_BOOL, TRUE, offsetof(struct MEMREF, read),
                                      IARG_END);
             }
 
@@ -171,7 +173,9 @@ VOID Trace(TRACE trace, VOID *v)
             {
                 INS_InsertFillBuffer(ins, IPOINT_BEFORE, bufId,
                                      IARG_INST_PTR, offsetof(struct MEMREF, pc),
+                                     IARG_THREAD_ID, offsetof(struct MEMREF, tid),
                                      IARG_MEMORYREAD2_EA, offsetof(struct MEMREF, ea),
+                                     IARG_BOOL, TRUE, offsetof(struct MEMREF, read),
                                      IARG_END);
             }
 
@@ -179,7 +183,9 @@ VOID Trace(TRACE trace, VOID *v)
             {
                 INS_InsertFillBuffer(ins, IPOINT_BEFORE, bufId,
                                      IARG_INST_PTR, offsetof(struct MEMREF, pc),
+                                     IARG_THREAD_ID, offsetof(struct MEMREF, tid),
                                      IARG_MEMORYWRITE_EA, offsetof(struct MEMREF, ea),
+                                     IARG_BOOL, FALSE, offsetof(struct MEMREF, read),
                                      IARG_END);
             }
         }
