@@ -64,6 +64,9 @@ KNOB<string> KnobOutputFile(KNOB_MODE_WRITEONCE, "pintool", "o", "membuffer.out"
 KNOB<BOOL> KnobEmitTrace(KNOB_MODE_WRITEONCE, "pintool", "emit", "0", "emit a trace in the output file");
 
 
+KNOB<UINT64> KnobMaxTracelines(KNOB_MODE_WRITEONCE, "pintool", "l", "100000", "maximum number of trace lines");
+
+
 
 /* Struct for holding memory references.
  */
@@ -129,7 +132,7 @@ MLOG::~MLOG()
 
 VOID MLOG::DumpBufferToFile( struct MEMREF * reference, UINT64 numElements, THREADID tid )
 {
-    for(UINT64 i=0; i<numElements; i++, reference++)
+    for(UINT64 i=0; i<numElements && i<KnobMaxTracelines; i++, reference++)
     {
         if (reference->ea != 0)
             _ofile << reference->tid << "," << hex << reference->pc << "," << (reference->read ? "R" : "w") << "," << reference->ea << endl; //TODO, pc: program counter; ea: effective address (data address)
