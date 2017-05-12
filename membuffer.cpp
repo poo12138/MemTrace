@@ -63,10 +63,9 @@ KNOB<string> KnobOutputFile(KNOB_MODE_WRITEONCE, "pintool", "o", "membuffer.out"
  */
 KNOB<BOOL> KnobEmitTrace(KNOB_MODE_WRITEONCE, "pintool", "emit", "0", "emit a trace in the output file");
 
+KNOB<UINT64> KnobSkipTracelines(KNOB_MODE_WRITEONCE, "pintool", "k", "100", "number of trace lines to skip");
 
-KNOB<UINT64> KnobMaxTracelines(KNOB_MODE_WRITEONCE, "pintool", "l", "100000", "maximum number of trace lines");
-
-
+KNOB<UINT64> KnobMaxTracelines(KNOB_MODE_WRITEONCE, "pintool", "l", "1000", "maximum number of trace lines");
 
 /* Struct for holding memory references.
  */
@@ -76,6 +75,7 @@ struct MEMREF
     ADDRINT   pc;
     BOOL     read;
     ADDRINT   ea;
+
 };
 
 BUFFER_ID bufId;
@@ -106,9 +106,10 @@ MLOG::MLOG(THREADID tid)
 {
     if (KnobEmitTrace)
     {
-        const string filename = KnobOutputFile.Value() + "." + decstr(getpid()) + "." + decstr(tid);
+//        const string filename = KnobOutputFile.Value() + "." + decstr(getpid()) + "." + decstr(tid);
+        const string filename = KnobOutputFile.Value() + "." + decstr(getpid()) + ".txt";
 
-        _ofile.open(filename.c_str());
+        _ofile.open(filename.c_str(), ios::app);
 
         if ( ! _ofile )
         {
@@ -129,12 +130,13 @@ MLOG::~MLOG()
     }
 }
 
+UINT64 j=0;
 
 VOID MLOG::DumpBufferToFile( struct MEMREF * reference, UINT64 numElements, THREADID tid )
 {
-    for(UINT64 i=0; i<numElements && i<KnobMaxTracelines; i++, reference++)
+    for(UINT64 i=0; i<numElements && j<(KnobMaxTracelines + KnobSkipTracelines); i++,j++, reference++)
     {
-        if (reference->ea != 0)
+        if (reference->ea != 0 && j>KnobSkipTracelines)
             _ofile << reference->tid << "," << hex << reference->pc << "," << (reference->read ? "R" : "w") << "," << reference->ea << endl; //TODO, pc: program counter; ea: effective address (data address)
     }
 }
