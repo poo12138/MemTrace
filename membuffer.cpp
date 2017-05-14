@@ -84,7 +84,6 @@ TLS_KEY mlog_key;
 
 #define NUM_BUF_PAGES 1024
 
-
 /*
  * MLOG - thread specific data that is not handled by the buffering API.
  */
@@ -130,15 +129,31 @@ MLOG::~MLOG()
     }
 }
 
-UINT64 j=0;
+UINT64 j = 0;
+BOOL threadSpawned;  
 
 VOID MLOG::DumpBufferToFile( struct MEMREF * reference, UINT64 numElements, THREADID tid )
 {
+    if (!threadSpawned && tid !=0){
+        threadSpawned = TRUE;
+    }
+
+    if (!threadSpawned) {
+        return;
+    }
+
     for(UINT64 i=0; i<numElements && j<(KnobMaxTracelines + KnobSkipTracelines); i++,j++, reference++)
     {
         if (reference->ea != 0 && j>KnobSkipTracelines)
             _ofile << reference->tid << "," << hex << reference->pc << "," << (reference->read ? "R" : "w") << "," << reference->ea << endl; //TODO, pc: program counter; ea: effective address (data address)
     }
+
+    if (KnobEmitTrace && j>=(KnobMaxTracelines + KnobSkipTracelines))
+    {
+        _ofile.close();
+        exit(0);
+    }
+
 }
 
 

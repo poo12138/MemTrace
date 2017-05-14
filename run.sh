@@ -3,7 +3,7 @@ mkdir -p traces/
 
 #~ ../../../pin -t obj-intel64/membuffer.so -emit 1 -o traces/ls.trace -- /bin/ls
 #~ ../../../pin -t obj-intel64/membuffer.so -emit 1 -o traces/simple_pthread.trace -- test_progs/simple_pthread/simple_pthread
-../../../pin -t obj-intel64/membuffer.so -emit 1 -k 100000000 -l 1000000000 -o traces/blackscholes.trace -- benchmarks/blackscholes/blackscholes 2 ../MemTrace/benchmarks/blackscholes/in_4K.txt ../MemTrace/benchmarks/blackscholes/prices.txt
+../../../pin -t obj-intel64/membuffer.so -emit 1 -k 100000 -l 1000000 -o traces/blackscholes.trace -- benchmarks/blackscholes/blackscholes 4 ../MemTrace/benchmarks/blackscholes/in_4K.txt ../MemTrace/benchmarks/blackscholes/prices.txt
 #~ ../../../pin -t obj-intel64/membuffer.so -emit 1 -o traces/bodytrack.trace -- benchmarks/bodytrack/bodytrack  ../MemTrace/benchmarks/bodytrack/sequenceB_1 4 1 1000 5 0 2
 #~ ../../../pin -t obj-intel64/membuffer.so -emit 1 -o traces/streamcluster.trace -- benchmarks/streamcluster/streamcluster  10 20 32 4096 4096 1000 none ../MemTrace/benchmarks/streamcluster/streamcluster/output.txt 2
 #~ ../../../pin -t obj-intel64/membuffer.so -emit 1 -o traces/canneal.trace -- benchmarks/canneal/canneal   2 10000 2000 ../MemTrace/benchmarks/canneal/100000.nets 32
